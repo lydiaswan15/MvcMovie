@@ -16,23 +16,38 @@ namespace MvcMovie.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.0");
 
+            modelBuilder.Entity("MvcMovie.Models.Genre", b =>
+                {
+                    b.Property<int>("GenreId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("GenreName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("GenreId");
+
+                    b.ToTable("Genre");
+                });
+
             modelBuilder.Entity("MvcMovie.Models.Movie", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Genre")
+                    b.Property<int>("GenreId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Image")
                         .IsRequired()
-                        .HasMaxLength(30)
+                        .HasMaxLength(5)
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18, 2)");
 
                     b.Property<string>("Rating")
-                        .IsRequired()
-                        .HasMaxLength(5)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("ReleaseDate")
@@ -45,7 +60,20 @@ namespace MvcMovie.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("GenreId");
+
                     b.ToTable("Movie");
+                });
+
+            modelBuilder.Entity("MvcMovie.Models.Movie", b =>
+                {
+                    b.HasOne("MvcMovie.Models.Genre", "Genre")
+                        .WithMany()
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Genre");
                 });
 #pragma warning restore 612, 618
         }

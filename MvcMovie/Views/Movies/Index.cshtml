@@ -17,9 +17,7 @@
         </select>
 
         Title: <input type="text" asp-for="SearchString" />
-        <input type="submit" value="Filter" />
 
-        Title: <input type="date" asp-for="MovieReleaseDate" />
         <input type="submit" value="Filter" />
     </p>
 </form>
@@ -31,7 +29,7 @@
                 @Html.DisplayNameFor(model => model.Movies[0].Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Movies[0].ReleaseDate)
+                @Html.ActionLink("Release Date", "Index", new{sortOrder = ViewBag.DateSortParm})
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Movies[0].Genre)
@@ -56,7 +54,7 @@
                     @Html.DisplayFor(modelItem => item.ReleaseDate)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Genre)
+                    @Html.DisplayFor(modelItem => item.Genre.GenreName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Price)

@@ -10,13 +10,27 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MvcMovie.Migrations
 {
     [DbContext(typeof(MvcMovieContext))]
-    [Migration("20211118032409_MovieGenreViewModel")]
-    partial class MovieGenreViewModel
+    [Migration("20211121031134_InitialCreateWithGenres")]
+    partial class InitialCreateWithGenres
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.0");
+
+            modelBuilder.Entity("MvcMovie.Models.Genre", b =>
+                {
+                    b.Property<int>("GenreId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("GenreName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("GenreId");
+
+                    b.ToTable("Genre");
+                });
 
             modelBuilder.Entity("MvcMovie.Models.Movie", b =>
                 {
@@ -24,10 +38,8 @@ namespace MvcMovie.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Genre")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("TEXT");
+                    b.Property<int>("GenreId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18, 2)");
@@ -47,7 +59,20 @@ namespace MvcMovie.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("GenreId");
+
                     b.ToTable("Movie");
+                });
+
+            modelBuilder.Entity("MvcMovie.Models.Movie", b =>
+                {
+                    b.HasOne("MvcMovie.Models.Genre", "Genre")
+                        .WithMany()
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Genre");
                 });
 #pragma warning restore 612, 618
         }
