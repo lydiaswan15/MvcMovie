@@ -35,7 +35,7 @@ namespace MvcMovie.Controllers
                          select m;
 
             if (!string.IsNullOrEmpty(searchString))
-            
+
             {
                 movies = movies.Where(s => s.Title.Contains(searchString));
             }
@@ -82,6 +82,7 @@ namespace MvcMovie.Controllers
             }
 
             var movie = await _context.Movie
+                .Include(m=> m.Genre)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (movie == null)
             {
@@ -95,6 +96,7 @@ namespace MvcMovie.Controllers
         public IActionResult Create()
         {
             ViewData["GenreId"] = new SelectList(_context.Set<Genre>(), "GenreId", "GenreName");
+            
             return View();
         }
 
@@ -103,7 +105,7 @@ namespace MvcMovie.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,ReleaseDate,Genre,GenreId,Price,Rating")] Movie movie)
+        public async Task<IActionResult> Create([Bind("Id,Title,ReleaseDate,Genre,GenreId,Price,Rating,Image")] Movie movie)
         {
             if (ModelState.IsValid)
             {
@@ -139,7 +141,7 @@ namespace MvcMovie.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ReleaseDate,Genre,GenreId,Price,Rating")] Movie movie)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ReleaseDate,Genre,GenreId,Price,Rating,Image")] Movie movie)
         {
             
             if (id != movie.Id)
@@ -179,6 +181,7 @@ namespace MvcMovie.Controllers
             }
 
             var movie = await _context.Movie
+                .Include(m=> m.Genre)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (movie == null)
             {
